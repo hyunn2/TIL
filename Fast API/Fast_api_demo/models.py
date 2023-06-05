@@ -20,5 +20,8 @@ class Answer(Base):
     id = Column(Integer, primary_key=True)
     content = Column(Text, nullable=False)
     create_date = Column(DateTime, nullable=False)
+    # 기존 모델과 연결
     question_id = Column(Integer, ForeignKey("question.id"))
+    # relationship으로 인해 answer 모델에서도 question 모델을 참조할 수 있음!
+    # backref : 역참조 설정
     question = relationship("Question", backref="answers")
