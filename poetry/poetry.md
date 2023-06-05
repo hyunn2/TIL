@@ -10,7 +10,6 @@
 
 - build/publish 지원
 - 가상환경(virtualenv)을 자체적으로 관리
-- 
 
 
 
