@@ -25,3 +25,12 @@ class Answer(Base):
     # relationship으로 인해 answer 모델에서도 question 모델을 참조할 수 있음!
     # backref : 역참조 설정
     question = relationship("Question", backref="answers")
+
+class User(Base):
+    __tablename__ = "user"
+
+    id = Column(Integer, primary_key=True)
+    username = Column(String, unique=True, nullable=False)
+    password = Column(String, nullable=True)
+    email = Column(String, unique=True, nullable=False)
+    
