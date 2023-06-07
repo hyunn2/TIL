@@ -1,3 +1,5 @@
+import contextlib
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -17,3 +19,14 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # DB 모델 구성시 필요한 클래스
 Base = declarative_base()
 
+
+
+
+# DB 세션의 생성과 반환을 자동화하는 제너레이터 함수
+@contextlib.contextmanager
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
