@@ -10,6 +10,7 @@ router = APIRouter(
 
 
 @router.get("/list")
+# db 객체가 Session 타입이며 db객체에 get_db에 의해 생성된 객체가 주입됨
 def question_list(db: Session = Depends(get_db)):
     _question_list = db.query(Question).order_by(Question.create_date.desc()).all()
     return _question_list
