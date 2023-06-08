@@ -2,7 +2,7 @@
 
 
 ## Fast API 특징
-- 
+
 
 
 ## 작동 방식
@@ -18,7 +18,10 @@
 데이터 검증에서 만약 users/me와 users/{user_id} (int) 2개가 있을 경우
 경로는 순차적으로 검증을 하기 때문에 users/me가 먼저 와야한다.
 그렇지 않으면 users/{user_id}는 매개변수 user_id의 값을 "me"라고 생각하여 에러를 발생시킬 수 있음
-그러면 users/{int형} users/{str형} 일 경우는 없으니까 상관이 없는건가? 있을수는 없나?
+그러면 users/{int형} users/{str형} 일 경우는?
+알 수 없다!
+int형이 앞에 있을 경우 문자열은 오류가 발생하고,
+str형이 앞에 있을 경우 기본적으로 str값으로 받아서 int도 str로 인식하여 모두 str형으로 들어간다.
 
 ## 모델 관련
 alembic 사용법
