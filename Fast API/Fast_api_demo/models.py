@@ -28,7 +28,7 @@ class Answer(Base):
     # backref : 역참조 설정
     question = relationship("Question", backref="answers")
     user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
-    user = relationship("User", backref="question_users")
+    user = relationship("User", backref="answer_users")
 
 class User(Base):
     __tablename__ = "user"
