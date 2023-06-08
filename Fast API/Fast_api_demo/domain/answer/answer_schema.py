@@ -11,3 +11,11 @@ class AnswerCreate(BaseModel):
             raise ValueError('빈 값은 허용되지 않습니다.')
         return v
 
+class Answer(BaseModel):
+    id: int
+    content: str
+    create_date: datetime.datetime
+
+    # 조회한 모델의 속성을 스키마에 매핑
+    class Config:
+        orm_mode = True
