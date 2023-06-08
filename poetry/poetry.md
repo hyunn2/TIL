@@ -5,6 +5,7 @@
 시스템 요구사항 : 파이썬 3.7 이상
 
 ---
+<br>
 
 ## 특징
 
@@ -12,23 +13,36 @@
 - 가상환경(virtualenv)을 자체적으로 관리
 
 
+<br>
 
 ## 설치 및 기본적인 사용법
 
+<br>
 
 ### 설치 방법
 
 리눅스, macOS, WSL
+<br>
+
 ``` curl -sSL https://install.python-poetry.org | python3 - ```
 
+<br>
 만약 오류가 날 경우
+<br>
+
 `Exception: This build of python cannot create venvs without using symlinks`
+
+<br>
 
 ```brew install poetry```
 
+<br>
 설치 확인
+<br>
+
 ``` poetry --version ```
 
+<br>
 
 
 ### 기본적인 사용법
@@ -36,14 +50,19 @@
 방법 1. 프로젝트를 설정한다.
 
 ``` poetry new [프로젝트명] ```
+<br>
 그 후 pyproject.toml파일에서 수정
+
+<br>
 
 방법 2. 
 프로젝트 폴더에 들어간 후 명령어 실행
-
+<br>
 ``` poetry init ```
+<br>
 pyproject.toml 파일만 생성되며, 대화 형식으로 패키지 설치
 
+<br>
 
 ### 종속성(의존성) 설치
 
@@ -53,8 +72,9 @@ pyproject.toml 파일만 생성되며, 대화 형식으로 패키지 설치
 1. poetry.lock 포함하지 않은 상태
 2. poetry.lock 포함한 상태
 
+<br>
 
-**poetry.lock의 역할**
+**poetry.lock의 역할** <br>
 poetry.lock은 정의된 의존성 파일을 설치하여 같은 환경에서 개발을 할 수 있게 도와준다.
 
 1. poetry.lock이 없는 상태에서 명령어(poetry install)를 실행할 경우
@@ -67,6 +87,7 @@ pyproject.toml 파일에 있는 패키지의 의존성을 해결하고 가장 �
 명령어(poetry install)를 실행할 경우 poetry.lock 파일에 있는 버전으로 패키지들이 다운받아진다.
 최신 버전이 아닐 수 있으니 주의!
 
+<br>
 
 ### 명령어
 - new
@@ -86,6 +107,7 @@ pyproject.toml 파일에 있는 패키지의 의존성을 해결하고 가장 �
 - export
 - env info
 
+<br>
 
 #### 기타
 **requirements.txt 추출하기**
@@ -93,6 +115,8 @@ pyproject.toml 파일에 있는 패키지의 의존성을 해결하고 가장 �
 ```bash poetry export -f requirements.txt > requirements.txt```
 
 (poetry build 명령어를 이용해 생성된 파일로 배포도 가능)
+
+<br>
 
 **명령어 사용법 확인**
 

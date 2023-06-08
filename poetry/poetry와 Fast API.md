@@ -7,10 +7,10 @@
 poetry run uvicorn main:app --reload
 ```
 
-uvicorn : 비동기 호출을 지원하는 파이썬용 저사양 웹서버
-main : main.py
-app : main.pydml app 객체
-reload : 프로그램이 변경되면 서버 재시작 없이 내용을 반영하는 옵션
+- uvicorn : 비동기 호출을 지원하는 파이썬용 저사양 웹서버
+- main : main.py
+- app : main.pydml app 객체
+- reload : 프로그램이 변경되면 서버 재시작 없이 내용을 반영하는 옵션
 
 
 ## 서버 실행 성공시
