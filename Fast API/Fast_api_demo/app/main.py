@@ -5,7 +5,6 @@ from fastapi import FastAPI, Query
 from pydantic import BaseModel
 from typing import Annotated
 
-
 from domain.question import question_router
 from domain.user import user_router
 from domain.answer import answer_router
@@ -23,9 +22,9 @@ app = FastAPI()
 #     price: float
 #     is_offer: Union[bool, None] = None
 
-# @app.get("/")
-# def read_root():
-#     return {"Hello" : "World"}
+@app.get("/")
+def read_main():
+    return {"msg" : "Hello World"}
 
 app.include_router(question_router.router)
 app.include_router(user_router.router)
