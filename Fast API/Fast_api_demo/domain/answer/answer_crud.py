@@ -25,3 +25,7 @@ def update_answer(db: Session, db_answer: Answer,
     db_answer.modeify_date = datetime.now()
     db.add(db_answer)
     db.commit()
+
+def delete_answer(db: Session, db_answer: Answer):
+    db.delete(db_answer)
+    db.commit()
