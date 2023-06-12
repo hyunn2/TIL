@@ -14,6 +14,7 @@ pytest란?
 - HTTPX에 기반하여 만들어졌다.
 
 HTTPX란?
+sync와 async API 및 HTTP/1.1과 HTTP/2를 지원하는 파이썬3용 HTTP 클라이언트
 
 
 ## 사용해보기
@@ -60,12 +61,13 @@ def test_read_main_case1():
 
 ```
 # 방법 1
-pytest -q
+pytest -q -s
 
 # 방법 2
 pytest 테스트할 파일
 ```
 q 옵션 : 간략하게 보기
+s 옵션 : Captured stdout call 켜기
 
 <br>
 
