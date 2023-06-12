@@ -1,8 +1,11 @@
 from fastapi.testclient import TestClient
 
 import pytest
+import uuid
 
 from app.main import app
+
+id_cnt = 0
 
 @pytest.fixture
 def client():
@@ -11,28 +14,67 @@ def client():
 
 @pytest.fixture
 def user1():
-    username = "nahkim"
+    username = uuid.uuid4().hex[:6]
     return username
 
 @pytest.fixture
 def user2():
-    username = "test1"
+    username = uuid.uuid4().hex[:6]
     return username
 
 @pytest.fixture
 def user3():
-    username = "test2"
+    username = uuid.uuid4().hex[:6]
     return username
 
 @pytest.fixture
-def question1():
-    id = 1
-    subject = "test_question1"
-    content = "test_question1"
-
-    return 
+def pwd1():
+    pwd = uuid.uuid4().hex[:6]
+    return pwd
 
 @pytest.fixture
-def answer1():
-    id = 1
-    content = "test_answer1"
+def pwd2():
+    pwd = uuid.uuid4().hex[:6]
+    return pwd
+
+@pytest.fixture
+def pwd3():
+    pwd = uuid.uuid4().hex[:6]
+    return pwd
+
+@pytest.fixture
+def email1():
+    email = uuid.uuid4().hex[:6]
+    return email
+
+@pytest.fixture
+def email2():
+    email = uuid.uuid4().hex[:6]
+    return email
+
+@pytest.fixture
+def email3():
+    email = uuid.uuid4().hex[:6]
+    return email
+
+@pytest.fixture
+def subject():
+    subject = uuid.uuid4().hex[:10]
+    return subject
+
+@pytest.fixture
+def content():
+    content = uuid.uuid4().hex[:15]
+    return content
+
+@pytest.fixture
+def id_counting():
+    cnt = id_cnt
+    id_cnt += 1
+    return cnt
+
+# @pytest.fixture
+# def question1():
+#     id = 1
+#     subject = uuid.uuid4().hex[:10]
+#     content = uuid.uuid4().hex[:20]
