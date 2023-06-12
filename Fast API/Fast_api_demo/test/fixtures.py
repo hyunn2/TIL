@@ -63,8 +63,18 @@ def subject():
     return subject
 
 @pytest.fixture
+def subject_blank():
+    subject = ''
+    return subject
+
+@pytest.fixture
 def content():
     content = uuid.uuid4().hex[:15]
+    return content
+
+@pytest.fixture
+def content_blank():
+    content = ''
     return content
 
 @pytest.fixture

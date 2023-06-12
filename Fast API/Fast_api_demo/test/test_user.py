@@ -2,6 +2,7 @@ from fastapi import status
 
 from .fixtures import *
 
+
 # 회원 가입
 def test_user_create_case(client, user1, user2, pwd1, pwd2, email1, email2):
     url = "/api/user/create"
@@ -123,8 +124,10 @@ def test_user_create_case(client, user1, user2, pwd1, pwd2, email1, email2):
                                "username": user1,
                                "password": pwd1,
                                })
-    print(user1, pwd1)
-    print(response.text)
+    # print(user1, pwd1)
+    # print(response.json().get("access_token"))
+    # print()
+    # print(response.text)
     assert response.status_code==status.HTTP_200_OK
 
 
