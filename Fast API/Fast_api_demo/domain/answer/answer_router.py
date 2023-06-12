@@ -12,7 +12,8 @@ router = APIRouter(
     prefix="/api/answer",
 )
 
-@router.post("/create/{question_id}", status_code=status.HTTP_204_NO_CONTENT)
+# 답변 생성
+@router.post("/create/{question_id}", status_code=status.HTTP_200_OK)
 def answer_create(question_id: int,
                   _answer_create: answer_schema.AnswerCreate,
                   db: Session = Depends(get_db),
@@ -30,7 +31,8 @@ def answer_create(question_id: int,
     #                                    question_id=question_id)
     # return RedirectResponse(url, status_code=303)
 
-@router.put("/update", status_code=status.HTTP_204_NO_CONTENT)
+# 답변 수정
+@router.put("/update", status_code=status.HTTP_200_OK)
 def answer_update(_answer_update: answer_schema.AnswerUpdate,
                   db: Session = Depends(get_db),
                   current_user: User = Depends(get_current_user)):
@@ -46,7 +48,8 @@ def answer_update(_answer_update: answer_schema.AnswerUpdate,
     
     answer_crud.update_answer(db=db, db_answer=db_answer, answer_update=_answer_update)
 
-@router.delete("/delete", status_code=status.HTTP_204_NO_CONTENT)
+# 답변 삭제
+@router.delete("/delete", status_code=status.HTTP_200_OK)
 def answer_delete(_answer_delete: answer_schema.AnswerDelete,
                   db: Session = Depends(get_db),
                   current_user: User = Depends(get_current_user)):
