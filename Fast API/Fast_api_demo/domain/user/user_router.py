@@ -22,7 +22,7 @@ router = APIRouter(
 )
 
 # 회원 가입
-@router.post("/create", status_code=status.HTTP_200_OK)
+@router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
 def user_create(_user_create: user_schema.UserCreate, db: Session = Depends(get_db)):
     user = user_crud.get_existing_user(db, user_create=_user_create)
     if user:
