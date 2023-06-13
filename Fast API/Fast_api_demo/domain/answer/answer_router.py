@@ -10,6 +10,7 @@ from models import User
 
 router = APIRouter(
     prefix="/api/answer",
+    tags=["Answer"]
 )
 
 # 답변 생성
