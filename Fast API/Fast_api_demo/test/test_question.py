@@ -348,12 +348,3 @@ def test_question_delete(client, user1, pwd1, email1, subject, content):
                                     'Content-Type': 'application/json'},
                             json={"question_id": 1})
     assert response.status_code==status.HTTP_400_BAD_REQUEST
-
-
-# 질문 삭제
-# 질문 등록자가 아닌 경우(권한이 없는 경우)
-# def test_question_delete():
-
-# 질문 삭제
-# 데이터가 없는 경우
-# def test_question_delete():
