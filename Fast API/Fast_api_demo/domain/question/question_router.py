@@ -27,7 +27,7 @@ def question_detail(question_id: int, db: Session = Depends(get_db)):
     return question
 
 # 질문 생성
-@router.post("/create", status_code=status.HTTP_200_OK)
+@router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
 def question_create(_question_create: question_schema.QuestionCreate,
                     db: Session = Depends(get_db),
                     current_user: User = Depends(get_current_user)):
@@ -35,7 +35,7 @@ def question_create(_question_create: question_schema.QuestionCreate,
                                     user=current_user)
 
 # 질문 수정
-@router.put("/update", status_code=status.HTTP_200_OK)
+@router.put("/update", status_code=status.HTTP_204_NO_CONTENT)
 def question_update(_question_update: question_schema.QuestionUpdate,
                     db: Session = Depends(get_db),
                     current_user: User = Depends(get_current_user)):
@@ -49,7 +49,7 @@ def question_update(_question_update: question_schema.QuestionUpdate,
     question_crud.update_question(db=db, db_question=db_question, question_update=_question_update)
 
 # 질문 삭제
-@router.delete("/delete", status_code=status.HTTP_200_OK)
+@router.delete("/delete", status_code=status.HTTP_204_NO_CONTENT)
 def question_delete(_question_delete: question_schema.QuestionDelete,
                     db: Session = Depends(get_db),
                     current_user: User = Depends(get_current_user)):

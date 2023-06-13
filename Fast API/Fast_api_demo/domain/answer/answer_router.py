@@ -14,7 +14,7 @@ router = APIRouter(
 )
 
 # 답변 생성
-@router.post("/create/{question_id}", status_code=status.HTTP_200_OK)
+@router.post("/create/{question_id}", status_code=status.HTTP_204_NO_CONTENT)
 def answer_create(question_id: int,
                   _answer_create: answer_schema.AnswerCreate,
                   db: Session = Depends(get_db),
