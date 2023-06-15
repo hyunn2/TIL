@@ -2,6 +2,8 @@ from typing import Union
 
 from enum import Enum
 from fastapi import FastAPI, Query
+from starlette.middleware.cors import CORSMiddleware
+
 from pydantic import BaseModel
 from typing import Annotated
 
@@ -9,7 +11,25 @@ from domain.question import question_router
 from domain.user import user_router
 from domain.answer import answer_router
 
+# import models
+# from database import engine
+# models.Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
+
+# cors
+# 서버 실행시 url이 어떤건지 보고 그거쓰기
+origins = [
+    "http://localhost:5173"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Enum 사용
 # class ModelName(str, Enum):
