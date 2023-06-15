@@ -35,18 +35,43 @@
   }
 </script>
 
-<h1>{question.subject}</h1>
-<div>
-  {question.content}
-</div>
+<div class="container my-3">
+  <h2 class="border-bottom py-2">{question.subject}</h2>
+  <div class="card my-3">
+    <div class="card-body">
+      <div class="card-text" style="white-space: pre-line;">
+        {question.content}
+      </div>
+      <div class="d-flex justify-content-end">
+        <div class="badge bg-light text-dark p-2">
+            {question.create_date}
+        </div>
+      </div>
+    </div>
+  </div>
 
-<ul>
+  <h5 class="border-bottom my-3 py2">
+    {question.answers.length}개의 답변
+  </h5>
   {#each question.answers as answer}
-    <li>{answer.content}</li>
+  <div class="card my-3">
+    <div class="card-body">
+      <div class="card-text" style="white-space: pre-line;">{answer.content}</div>
+      <div class="d-flex justify-content-end">
+        <div class="badge bg-light text-dark p-2">
+          {answer.create_date}
+        </div>
+      </div>
+    </div>
+  </div>
   {/each}
-</ul>
-<Error error={error} />
-<form method="post">
-  <textarea rows='15' bind:value={content}></textarea>
-  <input type="submit" value="답변 등록" on:click={post_answer}>
-</form>
+    <!-- <li>{answer.content}</li> -->
+  <!-- 답변 등록 버튼 -->
+  <Error error={error} />
+  <form method="post" class="my-3">
+    <div class="mb-3">
+      <textarea rows='15' bind:value={content}></textarea>
+    </div>
+    <input type="submit" value="답변 등록" on:click={post_answer}>
+  </form>
+</div>
