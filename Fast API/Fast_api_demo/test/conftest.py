@@ -1,3 +1,5 @@
+# from database import SessionLocal
+# from models import User, Question, Answer
 from fastapi.testclient import TestClient
 
 import pytest
@@ -6,6 +8,14 @@ import uuid
 from app.main import app
 
 id_cnt = 0
+
+# @pytest.fixture(autouse=False)
+# def db():
+#     yield None
+#     db = SessionLocal()
+#     db.query(User).delete()
+#     db.query(Question).delete()
+#     db.query(Answer).delete()
 
 @pytest.fixture
 def client():

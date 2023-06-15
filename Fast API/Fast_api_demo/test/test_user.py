@@ -1,7 +1,5 @@
 from fastapi import status
 
-from .fixtures import *
-
 
 # 회원 가입
 def test_user_create_case(client, user1, pwd1, email1):
@@ -131,7 +129,18 @@ def test_login_for_access_token_case(client, user1, user2, pwd1, pwd2, email1):
     
     assert response.status_code==status.HTTP_401_UNAUTHORIZED
 def test_login_for_access_token_case1(client, user1, pwd1, email1):
-    test_user_create_case(client=client, user1=user1, pwd1=pwd1, email1=email1)
+    # test_user_create_case(client=client, user1=user1, pwd1=pwd1, email1=email1)
+    url = "/api/user/create"
+    response = client.post(url,
+                           headers={'Content-Type': 'application/json'},
+                           json={
+                               "username": user1,
+                               "password1": pwd1,
+                               "password2": pwd1,
+                               "email": email1 + "@example.com"
+                           })
+    assert response.status_code==status.HTTP_204_NO_CONTENT
+    
     # 로그인 성공
     response = client.post("/api/user/login",
                            headers={'accept': 'application/json',

@@ -1,8 +1,6 @@
 from .test_user import test_login_for_access_token_case1
 from fastapi import status
 
-from .fixtures import *
-
 # 질문 리스트
 def test_question_list(client):
     url = "/api/question/list"
@@ -333,6 +331,15 @@ def test_question_delete(client, user1, pwd1, email1, subject, content):
                                     'Content-Type': 'application/json'},
                             json={"question_id": 2})
     assert response.status_code==status.HTTP_401_UNAUTHORIZED
+
+    # #########
+    # response = client.delete(url,
+    #                          headers={'accept': '*/*',
+    #                                 'Authorization': token_type + ' ' + token, 
+    #                                 'Content-Type': 'application/json'}, 
+    #                         json={"question_id": 2})
+    # assert response.status_code==status.HTTP_204_NO_CONTENT
+    #########
 
     response = client.request("DELETE", url,
                              headers={'accept': '*/*',

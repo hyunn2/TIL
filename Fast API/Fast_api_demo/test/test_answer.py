@@ -1,7 +1,5 @@
 from fastapi import status
 
-from .fixtures import *
-
 def test_answer_create(client, user1, pwd1, email1, subject, content_blank, content):
     question_id = 1
     url = f"/api/answer/create/{question_id}"
