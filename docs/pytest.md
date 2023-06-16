@@ -88,7 +88,9 @@ pytest --fixtures
 
 
 ## fixtures
-fixtures란?
+테스팅을 하면서 필요한 부분들을 미리 준비해놓은 소스 코드들
+
+ex) 회원 가입시 랜덤한 아이디와 비밀번호가 필요할 때 fixture에 객체를 생성
 
 <br>
 
@@ -102,30 +104,29 @@ Fixtures는 테스트시 처음 요청될 때 생성되며, 스코프 기반에 
 <br>
 
 ``` @pytest.fixture(scope="function") == @pytest.fixture ```
-- function: 기본 스코프이며, 함수가 끝나면 소멸된다. (함수 단위로 생성됨)
+- function: 기본 스코프이며, 함수가 끝나면 소멸된다.
 
 
 <br>
 
 ``` @pytest.fixture(scope="class") ```
-- class: 클래스가 끝나면 소멸된다. (클래스 단위로 생성)
+- class: 클래스가 끝나면 소멸된다.
 
 <br>
 
 ``` @pytest.fixture(scope="module") ```
-- module: 모듈이 끝나면 소멸된다. (모듈 단위로 생성)
+- module: 모듈이 끝나면 소멸된다.
 
 <br>
 
 ``` @pytest.fixture(scope="package") ```
-- package: 패키지 단위로 소멸된다. (패키지 단위로 생성)
+- package: 패키지 단위로 소멸된다.
 
 <br>
 
 ``` @pytest.fixture(scope="session") ```
-- session: 세션 단위로 소멸된다. (세션 단위로 생성)
+- session: 세션 단위로 소멸된다.
 
-한번에 하나의 인스턴스가 캐쉬된다.
 
 <br>
 
@@ -181,5 +182,23 @@ def test_read_main_case1(client):
     assert response.json() == {"msg" : "Hello World"}
 
 ```
+
+**위의 예시에선 fixture.py을 테스트마다 import를 해줬는데, 그렇게 하게되면 테스트가 많아질수록 다 넣어줘야하기 때문에 conftest.py를 사용해보자**
+
+**필요한 파일**
+- main.py (테스트할 파일)
+- conftest.py (fixtures 적용된 파일)
+- test_main.py (테스트할 파일)
+
+위의 코드와 같지만 변경해줘야할 것은 
+1. fixtures.py -> conftest.py 파일명 변경
+2. test_main.py에 있는 `from .fixtures import *` 삭제
+
+
+fixtures가 적용된 파일의 이름을 conftest.py로 만들면 `from .fixtures import *` 이부분을 작성하지 않아도 자동으로 읽는다.
+
+conftest.py 파일 적용시 테스트할 파일에 `from .fixtures import *` 부분을 꼭 삭제해야한다.(안그러면 오류가 발생)
+
+
 
 ## mocking or mock object
