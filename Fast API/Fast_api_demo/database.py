@@ -12,6 +12,7 @@ engine = create_engine(
 )
 # DB 접속을 위한 클래스
 # autocommit : 데이터 변경시 DB에 즉시 변경사항이 적용 유무
+# (False일 경우 commit() 을 해야지 실제 저장이 된다. -> roolback 가능)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # DB 모델 구성시 필요한 클래스
