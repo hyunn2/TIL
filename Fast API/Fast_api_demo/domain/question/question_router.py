@@ -14,11 +14,14 @@ router = APIRouter(
 )
 
 # 질문 리스트
-@router.get("/list", response_model=list[question_schema.Question])
+@router.get("/list", response_model=question_schema.QuestionList)
 # db 객체가 Session 타입이며 db객체에 get_db에 의해 생성된 객체가 주입됨
-def question_list(db: Session = Depends(get_db)):
-    _question_list = question_crud.get_question_list(db)
-    return _question_list
+def question_list(db: Session = Depends(get_db), page: int = 0, size: int = 10):
+    total, _question_list = question_crud.get_question_list(db, skip=page*size, limit=size)
+    return {
+        'total': total,
+        'question_list': _question_list
+    }
 
 # 질문 상세
 @router.get("/detail/{question_id}", response_model=question_schema.Question)

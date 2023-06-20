@@ -17,6 +17,10 @@ class Question(BaseModel):
     class Config:
         orm_mode = True
 
+class QuestionList(BaseModel):
+    total: int = 0
+    question_list: list[Question] = []
+
 class QuestionCreate(BaseModel):
     subject: str
     content: str
