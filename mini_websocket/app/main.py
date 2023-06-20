@@ -1,7 +1,15 @@
 # from starlette.websockets import WebSocket
 from typing import Annotated
 
-from fastapi import FastAPI, WebSocket, Cookie, Depends, Query, WebSocketException, status
+from fastapi import (
+    FastAPI,
+    WebSocket,
+    Cookie,
+    Depends,
+    Query,
+    WebSocketException,
+    status
+)
 from fastapi.responses import HTMLResponse
 
 app = FastAPI()
