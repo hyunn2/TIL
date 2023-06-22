@@ -31,5 +31,6 @@ async def websocket_endpoint(websocket: WebSocket):
                 task.cancel()
             for task in done:
                 task.result()
+    # 연결이 끊길 경우
     except WebSocketDisconnect:
         await websocket.close()
