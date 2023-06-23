@@ -2,13 +2,17 @@
 
 키-값 기반의 인메모리 데이터 저장소
 
+<br>
+
 **사용하는 이유**
 
 데이터 I/O 성능을 극대화하기 위해 사용
 
 <br>
 
-**사용 방법**
+## 사용 방법
+
+<br>
 
 방법1
 
@@ -28,7 +32,7 @@ poetry add redis
 poetry run redis-cli
 ```
 
-poetry에 redis 패키지는 redis client이다. 이름이 redis이다.
+poetry에 redis 패키지는 redis client이다.(redis-py) 이름이 redis이다.
 
 접속후 ping을 보내면 PONG이 온다.
 
@@ -67,6 +71,9 @@ docker에서 image pull 받아서 설치 및 실행
 docker pull redis
 
 
+# [둘 중 하나 선택]
+# 기본 시작하기
+docker run -p 6379:6379 redis
 # 디스크에 데이터 쓰는걸로 시작하기
 docker run --name some-redis -d redis redis-server --save 60 1 --loglevel warning
 
@@ -157,16 +164,30 @@ fork의 경우 부모 프로세스로부터 자식프로세스에 복사를 하�
 
 **싱글 스레드**
 
-Redis는 싱글 스레디이기 때문에 시간이 오래 걸리는 Redis 명령은 하면 안된다
+Redis는 싱글 스레드이기 때문에 시간이 오래 걸리는 Redis 명령은 하면 안된다
 
 <br>
 
-**redis 서버에서 하지 말아야할 것들**
+**배포된 redis 서버에서 하지 말아야할 것**
 
 - 서버에서 keys 명령어를 사용하지 않아야함
-- flushdb
+
+keys의 경우 한번에 모든 key들을 가져오는데 key가 많을 수록 처리 시간이 많이 소요되며, 그동안 다른 명령을 처리하지 못한다.
+
+반면, scan의 경우 한번에 특정 갯수씩 조회하고 명령어를 수행하는 동안 다른 명령을 처리할 수 있다.
+
+대신 scan이나 sets을 사용을 하는 것을 추천
+
+|명령어|KEYS|SCAN|
+|---|---|---|
+|시간 복잡도|O(N)|모든 호출은 O(1), 전체 순회의 경우 O(N)|
+|특징|한번에 모든 key들을 가져옴|한번에 key의 특정 갯수들을 가져옴|
+||처리하는 동안 다른 명령어를 처리 불가능|처리하는 동안 다른 명령어 처리 가능|
+
+
 
 <br>
+
 
 **복제**
 
@@ -174,7 +195,13 @@ Redis는 싱글 스레디이기 때문에 시간이 오래 걸리는 Redis 명�
 
 <br>
 
-**Redis CLI 명령어**
+---
+
+<br>
+
+## Redis CLI 명령어
+
+<br>
 
 소문자를 사용해도, 대문자를 사용해도 상관이 없으나 대문자를 사용한다.
 
@@ -184,9 +211,6 @@ Redis는 싱글 스레디이기 때문에 시간이 오래 걸리는 Redis 명�
 ```
 KEYS []
 ```
-<br>
-
-- SELECT
 
 <br>
 
@@ -197,15 +221,25 @@ KEYS []
 EXISTS [key]
 ```
 key에 *를 넣으면 전체 key를 확인 할 수 있음
+
 <br>
 
-- set
+---
+
+<br>
+
+## Strings 명령어
+
+<br>
+
+- SET
 
 key, value 데이터 저장
 ```
 SET [key] [value]
 ```
 <br>
+
 
 - GET
 
@@ -229,13 +263,6 @@ EXPIRE [key] [만료 시간]
 ```
 <br>
 
-- SETEX
-
-생성하면서 만료 시간 정하기
-```
-SETEX [key] [만료 시간] [value]
-```
-<br>
 
 - TTL
 
@@ -249,33 +276,34 @@ TTL [key]
 
 <br>
 
-**LIST**
+- quit
+```
+QUIT
+```
+터미널 종료
+
+<br>
+
+---
+
+<br>
+
+**LIST 명령어**
 
 <br>
 
 - RPUSH
 오른쪽에 마지막 끝부분에 저장
 ```
-RPUSH [key] [value]
+RPUSH <key> <value>
 ```
 
 - LPUSH
 
 왼쪽에 있는 첫번째 시작부분에 저장
 ```
-LPUSH [key] [value]
+LPUSH <key> <value>
 ```
-
-- LRANGE
-LPUSH를 할 경우 GET 명령어로 확인할 수 없다.
-LRANGE 명령어를 통해 함수의 범위를 지정해줘야한다.
-```
-LRANGE [key] [start] [end]
-```
-0 : 처음 값
-1 : 그다음 값
--1: 마지막값
--2: 마지막에서 두번째값
 
 <br>
 
@@ -283,21 +311,55 @@ LRANGE [key] [start] [end]
 
 마지막 값 삭제
 ```
+RPOP <key> [count]
 ```
 
 - LPOP
 
 맨 첫번째 값 삭제
 ```
+LPOP <key> [count]
 ```
 
 <br>
 
+- LRANGE
 
-**SET**
+LPUSH를 할 경우 GET 명령어로 확인할 수 없다.
+LRANGE 명령어를 통해 함수의 범위를 지정해줘야한다.
+```
+LRANGE <key> <start> <end>
+```
+0 : 처음 값
+
+1 : 그다음 값
+
+-1: 마지막값
+
+-2: 마지막에서 두번째값
+
+<br>
+
+
+<br>
+
+---
+
+
+## SET 명령어
+
+<br>
 
 모든 항목 접두사에 S를 붙이면 된다.
 
+<br>
+
+- SETEX
+
+생성하면서 만료 시간 정하기
+```
+SETEX <key> <만료 시간> <value>
+```
 <br>
 
 - SADD
@@ -310,21 +372,25 @@ LRANGE [key] [start] [end]
 
 - SREM
 ```
-SREM [지우고 싶은 집합이름] [지우고 싶은 값]
+SREM <지우고 싶은 집합이름> <지우고 싶은 값>
 ```
 
-**HASH**
+---
+
+## HASH 명령어
+
+<br>
 
 - HSET
 ```
-HSET [집합] [key] [value 값]
+HSET <집합> <key> <value>
 ```
 <br>
 
 
 - HGET
 ```
-HGET [집합] [key] [value]
+HGET <집합> <key> <value>
 ```
 
 <br>
@@ -332,31 +398,132 @@ HGET [집합] [key] [value]
 - HGETALL
 모든것 가지고 오기
 ```
-HGETALL [집합이름]
+HGETALL <key>
 ```
 
 <br>
 
 - HDEL
+hash에 저장된 키값의 필드 삭제
+```
+HDEL <key> <field>
+```
 
 <br>
 
 - HEXISTS
 ```
+HEXISTS <key> <field>
 ```
 
+<br>
+
+---
+
+<br>
+
+## Database 관련 명령어
+
+<br>
+
+- SELECT
+
+데이터베이스를 선택하는 명령어
+
+Database가 여러 개일 경우 db를 선택하여 처리하는것
+
+연결시에는 항상 데이터베이스 0을 사용한다(default)
+
+```
+SELECT [index]
+```
+
+<br>
+
+- BGSAVE
+백그라운드에서 DB 저장
+일반적으로 성공시 OK 반환
+Redis fork와 부모 프로세스는 클라이언트에 서비스를 제공하고 자식 프로세스는 디스크에 DB를 저장 후 종료
+
+```
+BGSAVE [SCHEDULE]
+```
+
+<br>
+
+- DBSIZE
+DB의 현재 키의 갯수
+
+```
+DBSIZE
+```
+
+<br>
 
 
 - FLUSHALL
-
-데이터베이스의 모든 항목을 제거
-
-
-- quit
+DB의 모든 항목을 삭제
 ```
-QUIT
+FLUSHALL [ASYNC | SYNC]
 ```
-터미널 종료
+
+<br>
+
+- FLUSHDB
+현재 선택된 DB의 모든 키를 삭제
+```
+FLUSHDB [ASYNC | SYNC]
+```
+
+<br>
+
+- MOVE
+현재 선택된 DB로 key를 이동시킨다.
+```
+MOVE [key] [db]
+```
+
+<br>
+
+- RANDOMKEY
+현재 선택된 DB의 랜덤한 key를 생성한다.
+```
+RANDOMKEY
+```
+
+<br>
+
+- SAVE
+RDB 파일 형식으로 동기식 저장을 수행
+```
+SAVE
+```
+
+<br>
+
+- SCAN
+현재 DB에 있는 key값을 특정 갯수를 출력
+cursor에 0을 넣고 그다음 값이 출력되는데 그 값을 넣으면 그다음 key들이 나온다.
+```
+SCAN cursor [MATCH pattern] [COUNT count] [TYPE type]
+```
+
+<br>
+
+
+- SHUTDOWN
+```
+SHUTDOWN [NOSAVE | SAVE] [NOW] [FORCE] [ABORT]
+```
+
+<br>
+
+- SWAPDB
+
+두 개의 DB를 바꾼다.
+```
+SWAPDB [index1] [index2]
+```
 
 
 <br>
