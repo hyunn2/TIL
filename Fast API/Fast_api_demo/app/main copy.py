@@ -13,6 +13,7 @@ from domain.answer import answer_router
 app = FastAPI()
 
 # cors
+# 서버 실행시 url이 어떤건지 보고 그거쓰기
 origins = [
     "http://localhost:5173"
 ]
@@ -50,7 +51,6 @@ manager = ConnectionManager()
 async def websocket_endpoint(websocket: WebSocket, client_id: int):
     # 소켓 연결
     await manager.connect(websocket)
-    await manager.broadcast(f"Client #{client_id} access the chat!")
     try:
         while True:
             # 데이터 받고 보내기
@@ -60,6 +60,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         await manager.broadcast(f"Client #{client_id} left the chat")
+
 
 app.include_router(question_router.router)
 app.include_router(user_router.router)
