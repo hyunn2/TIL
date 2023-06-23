@@ -6,6 +6,7 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 from starlette import status
+from Redis.user_login import register_login_check_user, check_black_user, check_login_cnt, check_login_list, increase_cnt, delete_login_list
 
 from database import get_db
 from domain.user import user_crud, user_schema
@@ -22,27 +23,45 @@ router = APIRouter(
     tags=["User"],
 )
 
-# 회원 가입
 @router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
 def user_create(_user_create: user_schema.UserCreate, db: Session = Depends(get_db)):
+    """회원가입"""
     user = user_crud.get_existing_user(db, user_create=_user_create)
     if user:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail="이미 존재하는 사용자입니다.")
     user_crud.create_user(db=db, user_create=_user_create)
 
-# 로그인
 @router.post("/login", response_model=user_schema.Token)
 def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
                            db: Session = Depends(get_db)):
+    """로그인"""
     # 유저 비밀번호 확인
     user = user_crud.get_user(db, form_data.username)
+
+    if check_black_user(form_data.username) == True:
+        raise HTTPException(
+            status_code=status.HTTP_202_ACCEPTED,
+            detail="Unable to log in because it keeps trying to log in",
+            # headers={"WWWW-Authenticate": "Bearer"}
+        )
+    
+    # 유저가 존재하지 않거나 비밀번호가 맞지 않을 경우
     if not user or not pwd_context.verify(form_data.password, user.password):
+        if user:
+            if check_login_list(user.username):
+                increase_cnt(user.username)
+                check_login_cnt(form_data.username)
+            else:
+                register_login_check_user(user.username)
+
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
             headers={"WWWW-Authenticate": "Bearer"}
         )
+    
+    delete_login_list(user.username)
     
     # access token 만들기
     data = {
@@ -57,9 +76,9 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
         "username": user.username
     }
     
-# 헤더 정보의 토큰을 읽어 사용자 객체를 리턴
 def get_current_user(token: str = Depends(oauth2_scheme),
                      db: Session = Depends(get_db)):
+    """헤더 정보의 토큰을 읽어 사용자 객체를 리턴"""
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -77,3 +96,7 @@ def get_current_user(token: str = Depends(oauth2_scheme),
         if user is None:
             raise credentials_exception
         return user
+    
+# 회원 탈퇴 
+# @router.delete("/delete", status_code=status.HTTP_200_OK)
+# def user_delete():
