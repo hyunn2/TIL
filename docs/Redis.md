@@ -20,7 +20,7 @@ local에 설치
 
 homebrew로 설치 및 실행
 
-```
+```bash
 # redis 설치
 brew install redis
 
@@ -46,7 +46,8 @@ poetry에 redis 패키지는 redis client이다.(redis-py) 이름이 redis이다
 방법2
 
 git에서 받아서 make로 build하여 설치 및 실행
-```
+
+```bash
 git clone https://github.com/redis/redis
 
 make
@@ -67,7 +68,8 @@ cd src
 방법3
 
 docker에서 image pull 받아서 설치 및 실행
-```
+
+```bash
 docker pull redis
 
 
@@ -107,7 +109,7 @@ root@[컨테이너 아이디]:/data# redis-cli
 
 **Key-Valuse 형태**
 
-```
+```bash
 set id:username "username"
 
 get id:username
@@ -120,6 +122,7 @@ get id:username
 보통 컬렉션은 하나의 서버 내부에서 동작하지만 레디스의 경우 분산 서버 환경에서 처리 가능하다.
 
 데이터 종류
+
 - Strings
 - Hashs
 - Lists
@@ -199,6 +202,21 @@ keys의 경우 한번에 모든 key들을 가져오는데 key가 많을 수록 �
 
 <br>
 
+redis 자료구조 종류
+- Strings (가장 기본 자료구조)
+- Lists
+- Sets
+- Hashes
+- Sorted sets
+- stream
+등등이 있다.
+
+<br>
+
+---
+
+<br>
+
 ## Redis CLI 명령어
 
 <br>
@@ -208,7 +226,7 @@ keys의 경우 한번에 모든 key들을 가져오는데 key가 많을 수록 �
 - KEYS
 
 해당 키를 보는 명령어
-```
+```bash
 KEYS []
 ```
 
@@ -217,7 +235,7 @@ KEYS []
 - EXISTS
 
 해당 키가 존재하는지 확인
-```
+```bash
 EXISTS [key]
 ```
 key에 *를 넣으면 전체 key를 확인 할 수 있음
@@ -235,7 +253,7 @@ key에 *를 넣으면 전체 key를 확인 할 수 있음
 - SET
 
 key, value 데이터 저장
-```
+```bash
 SET [key] [value]
 ```
 <br>
@@ -244,13 +262,21 @@ SET [key] [value]
 - GET
 
 해당 key의 value를 보는 명령어
-```
+```bash
 GET [key 이름]
 ```
 <br>
 
-- DEL
+- MGET
+여러개의 key의 value를 확인하는 명령어
+```bash
+MGET <key> [key ...]
 ```
+
+<br>
+
+- DEL
+```bash
 DEL [key]
 ```
 <br>
@@ -258,16 +284,17 @@ DEL [key]
 - EXPIRE
 
 생성된 key의 만료시간 설정
-```
+```bash
 EXPIRE [key] [만료 시간]
 ```
+
 <br>
 
 
 - TTL
 
 time to live
-```
+```bash
 TTL [key]
 ```
 -1 일 경우 영속성을 지님
@@ -276,8 +303,8 @@ TTL [key]
 
 <br>
 
-- quit
-```
+- QUIT
+```bash
 QUIT
 ```
 터미널 종료
@@ -288,21 +315,36 @@ QUIT
 
 <br>
 
-**LIST 명령어**
+## LISTS 명령어
+
+<br>
+
+- LPUSH
+
+왼쪽에 있는 첫번째 시작부분에 저장
+
+```bash
+LPUSH <key> <value>
+```
 
 <br>
 
 - RPUSH
 오른쪽에 마지막 끝부분에 저장
-```
+
+```bash
 RPUSH <key> <value>
 ```
 
-- LPUSH
 
-왼쪽에 있는 첫번째 시작부분에 저장
-```
-LPUSH <key> <value>
+<br>
+
+- LPOP
+
+맨 첫번째 값 삭제
+
+```bash
+LPOP <key> [count]
 ```
 
 <br>
@@ -310,16 +352,42 @@ LPUSH <key> <value>
 - RPOP
 
 마지막 값 삭제
-```
+
+```bash
 RPOP <key> [count]
 ```
 
-- LPOP
+<br>
 
-맨 첫번째 값 삭제
+- LLEN
+
+키의 갯수
+
+```bash
+LLEN <key>
 ```
-LPOP <key> [count]
+
+
+<br>
+
+- LMOVE
+값 이동
+
+```bash
+LMOVE source destination <LEFT | RIGHT> <LEFT | RIGHT>
 ```
+source 부분의 맨<왼쪽 | 오른>쪽에 있는 key를 destination의 맨<오른쪽 | 왼쪽>으로 이동시킴
+
+
+<br>
+
+- LTRIM
+목록 자르기
+
+```bash
+LTRIM key start stop
+```
+start ~ stop 구간의 있는 값을 자른다.
 
 <br>
 
@@ -327,7 +395,7 @@ LPOP <key> [count]
 
 LPUSH를 할 경우 GET 명령어로 확인할 수 없다.
 LRANGE 명령어를 통해 함수의 범위를 지정해줘야한다.
-```
+```bash
 LRANGE <key> <start> <end>
 ```
 0 : 처음 값
@@ -338,6 +406,7 @@ LRANGE <key> <start> <end>
 
 -2: 마지막에서 두번째값
 
+
 <br>
 
 
@@ -346,7 +415,7 @@ LRANGE <key> <start> <end>
 ---
 
 
-## SET 명령어
+## SETS 명령어
 
 <br>
 
@@ -357,23 +426,51 @@ LRANGE <key> <start> <end>
 - SETEX
 
 생성하면서 만료 시간 정하기
-```
+```bash
 SETEX <key> <만료 시간> <value>
 ```
 <br>
 
 - SADD
+key를 저장하며 key가 존재하지 않는다면, 새로운 set을 만든다.
+```bash
+SADD key member [member ...]
+``` 
 
 <br>
 
 - SMEMBERS
+set에 있는 모든 값을 반환
+```bash
+SMEMBERS key
+```
 
 <br>
 
 - SREM
-```
+
+지정된 값 삭제
+```bash
 SREM <지우고 싶은 집합이름> <지우고 싶은 값>
 ```
+
+<br>
+
+- SINTER
+공통된 값 반환
+```bash
+SINTER key [key ...]
+```
+
+<br>
+
+- SCARD
+특정 집합의 카디널리티 반환
+```bash
+SCARD key
+```
+
+<br>
 
 ---
 
@@ -382,22 +479,30 @@ SREM <지우고 싶은 집합이름> <지우고 싶은 값>
 <br>
 
 - HSET
-```
+```bash
 HSET <집합> <key> <value>
 ```
 <br>
 
 
 - HGET
-```
+```bash
 HGET <집합> <key> <value>
+```
+
+<br>
+
+- HMGET
+주어진 필드의 맞는 모든 value값 반환
+```bash
+HMGET key field [field ...]
 ```
 
 <br>
 
 - HGETALL
 모든것 가지고 오기
-```
+```bash
 HGETALL <key>
 ```
 
@@ -405,16 +510,61 @@ HGETALL <key>
 
 - HDEL
 hash에 저장된 키값의 필드 삭제
-```
+```bash
 HDEL <key> <field>
 ```
 
 <br>
 
 - HEXISTS
-```
+```bash
 HEXISTS <key> <field>
 ```
+
+<br>
+
+- HINCRBY
+해시에 저장된 숫자를 주어진 숫자(increment)로 증가시킴
+```bash
+HINCRBY key field increment
+```
+
+
+<br>
+
+---
+
+<br>
+
+## Sorted Sets 명령어
+
+중복이 없으며 정렬이 되어있다.
+
+
+- ZADD
+값을 추가하되 이미 있는 key라면 value를 수정한다.
+```bash
+ZADD key [NX | XX] [GT | LT] [CH] [INCR] score member [score member ...]
+```
+
+- ZRANGE
+지정된 범위의 key의 value를 반환
+```bash
+ZRANGE key start stop [BYSCORE | BYLEX] [REV] [LIMIT offset count] [WITHSCORES]
+```
+
+- ZRANK
+값이 작은 value를 가지고 있는 순으로 순위를 반환
+```bash
+ZRANK key member [WITHSCORE]
+```
+
+- ZREVRANK
+값이 큰 value를 가지고 있는 순으로 순위를 반환
+```bash
+ZREVRANK key member [WITHSCORE]
+```
+
 
 <br>
 
@@ -434,7 +584,7 @@ Database가 여러 개일 경우 db를 선택하여 처리하는것
 
 연결시에는 항상 데이터베이스 0을 사용한다(default)
 
-```
+```bash
 SELECT [index]
 ```
 
@@ -445,7 +595,7 @@ SELECT [index]
 일반적으로 성공시 OK 반환
 Redis fork와 부모 프로세스는 클라이언트에 서비스를 제공하고 자식 프로세스는 디스크에 DB를 저장 후 종료
 
-```
+```bash
 BGSAVE [SCHEDULE]
 ```
 
@@ -454,7 +604,7 @@ BGSAVE [SCHEDULE]
 - DBSIZE
 DB의 현재 키의 갯수
 
-```
+```bash
 DBSIZE
 ```
 
@@ -463,7 +613,7 @@ DBSIZE
 
 - FLUSHALL
 DB의 모든 항목을 삭제
-```
+```bash
 FLUSHALL [ASYNC | SYNC]
 ```
 
@@ -471,7 +621,7 @@ FLUSHALL [ASYNC | SYNC]
 
 - FLUSHDB
 현재 선택된 DB의 모든 키를 삭제
-```
+```bash
 FLUSHDB [ASYNC | SYNC]
 ```
 
@@ -479,7 +629,7 @@ FLUSHDB [ASYNC | SYNC]
 
 - MOVE
 현재 선택된 DB로 key를 이동시킨다.
-```
+```bash
 MOVE [key] [db]
 ```
 
@@ -487,7 +637,7 @@ MOVE [key] [db]
 
 - RANDOMKEY
 현재 선택된 DB의 랜덤한 key를 생성한다.
-```
+```bash
 RANDOMKEY
 ```
 
@@ -495,7 +645,7 @@ RANDOMKEY
 
 - SAVE
 RDB 파일 형식으로 동기식 저장을 수행
-```
+```bash
 SAVE
 ```
 
@@ -504,7 +654,7 @@ SAVE
 - SCAN
 현재 DB에 있는 key값을 특정 갯수를 출력
 cursor에 0을 넣고 그다음 값이 출력되는데 그 값을 넣으면 그다음 key들이 나온다.
-```
+```bash
 SCAN cursor [MATCH pattern] [COUNT count] [TYPE type]
 ```
 
@@ -512,7 +662,7 @@ SCAN cursor [MATCH pattern] [COUNT count] [TYPE type]
 
 
 - SHUTDOWN
-```
+```bash
 SHUTDOWN [NOSAVE | SAVE] [NOW] [FORCE] [ABORT]
 ```
 
@@ -521,7 +671,7 @@ SHUTDOWN [NOSAVE | SAVE] [NOW] [FORCE] [ABORT]
 - SWAPDB
 
 두 개의 DB를 바꾼다.
-```
+```bash
 SWAPDB [index1] [index2]
 ```
 
@@ -531,7 +681,8 @@ SWAPDB [index1] [index2]
 # 코드에서 사용하기
 
 redis를 터미널에서 사용하기 위해 사용할 명령어
-```
+
+```bash
 r = redis.Redis(host="localhost", port=6379, decode_responses=True)
 
 r.set('foo', 'bar) 
@@ -560,5 +711,10 @@ r.get('foo')
 
 | Standalone | Sentinel | Cluster |
 
+  
 
-<br>
+reids.conf 권장 설정
+1. Maxclient 값을 충분히 높히기
+2. RDB/AOP 설정 비활성화
+3. 부하가 심한 커맨드 비활성화 ex)KEYS
+rename-command CONFIG ""
