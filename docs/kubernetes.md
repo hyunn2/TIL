@@ -217,6 +217,8 @@ minikube delete
 
 - 명령적 접근 방식
 - 선언적 접근 방식
+  전체 명령을 반복할 필요가 없다.
+  다른 팀원에게 공유하기도 편하며, 직관적이다.
 
 
 ### 명령적 접근 방식
@@ -245,12 +247,23 @@ kubectl expose deployment [만든 이름] --port=... --type=LoadBalancer
 
 **실행 방법**
 
-연결된 클러스터에 구성 파일을 적용
+연결된 클러스터에 구성 파일(config file)을 적용
 
 ```bash
+# 변경 사항 또한 같은 명령어임
 kubectl apply -f [파일 이름 or 파일 경로]
+
+# 레이블 별로 객체 삭제
+kubectl delete [deployment or service] -l [key=value]
 ```
 옵션: f 파일 식별(한번에 여러 파일을 적용할 경우 -f 옵션을 사용하면 됨)
+
+삭제 방법
+```bash
+# 파일에 의해 생성된 리소스 삭제
+kubectl delete -f=[파일 이름].yaml
+kubectl delete -f=[파일안에 정한 이름],[여러개 가능]
+```
 
 ```yaml
 # deployment.yaml
@@ -265,7 +278,7 @@ metadata: [만들 이름]
 spec:
   # pod 인스턴스의 수
   replicas: 1
-  # deployment에게 어떤 pod인지 알려줌
+  # deployment에게 어떤 pod인지 알려줌(연결) + 다른 리소스를 리소스에 연결하는데 사용
   selector: 
     matchLabels:
       app: second-app
@@ -293,6 +306,8 @@ kubectl apply -f [파일 이름 or 파일 경로]
 
 minikube service backend
 ```
+
+service를 삭제할 경우 그와 연결된 것도 삭제된다 ex)deployment
 
 ```yaml
 # service.yaml
@@ -323,7 +338,79 @@ spec:
 **type**
 
 ClusterIP : 기본 디폴트
-
 NodePort : 기본적으로 실행되는 워커노드의 IP와 포트에 노출
 
 LoadBalancer : 가장 일반적으로 사용
+
+---
+
+또한 이 두 파일(deployment.yaml, service.yaml)을 하나의 파일에 저장할 수 있음
+
+서비스를 앞에 두는 것이 좋다(리소스가 먼저 생성되도록 하기 위해)
+
+"---" 으로 구분시킨다.
+
+```yaml
+# master-deployment.yaml
+
+# service
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+    app: second-app
+
+  ports:
+    - protocol: 'TCP'
+      # 노출하고자 하는 외부 포트
+      port: 80
+      # 컨테이너 포트
+      targetPort: 8080
+    # - protocol: 'TCP'
+    #   port: 443
+    #   targetPort: 443
+  type: LoadBalancer
+---
+# deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata: [만들 이름]
+  name: [만들 이름]
+# 구성 방법 정의
+spec:
+  # pod 인스턴스의 수
+  replicas: 1
+  # deployment에게 어떤 pod인지 알려줌
+  selector: 
+    # matchExpressions:
+    #   - {key: app, values: [second-app, 등등]}
+    matchLabels:
+      app: second-app
+      key: value
+  # pod
+  template:
+    metadata:
+      labels:
+        app: second-app
+        key: value
+    spec:
+      containers:
+        - name: second-node
+          image: [이미지 이름]
+          # 컨테이너가 실행중인지 확인
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+              # 작업 수행 빈도
+              periodSeconds: 10
+              # 상태를 확인할때가지 기다리는 시간
+              initialDelaySeconds: 5
+
+```
+
+selector의 matchLabels와 matchExpressions(더 최신)
+matchLabels : 레이블에 키 값 쌍이 여러개 중첩
+matchExpressions : 중괄호로 정의 {key: app, values: [허용하려는 값 목록]}, operator도 사용가능
