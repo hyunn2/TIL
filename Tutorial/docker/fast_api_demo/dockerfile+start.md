@@ -6,7 +6,7 @@
 ```Dockerfile
 FROM python:3.10
 
-MAINTAINER nahkim "<nahkim@huray.net>"
+MAINTAINER nahkim <nahkim@huray.net>
 
 ENV POETRY_VERSION=1.5.1
 
@@ -66,3 +66,13 @@ docker exec -it [container ID] /bin/bash
 ```bash
 docker container logs -t [Container ID]
 ```
+
+**Dockerfile에 이름 설정하기**
+
+```bash
+backend.Dockerfile
+
+docker build -f backend.Dockerfile -t [만들 이름] [실행할 Dockerfile 위치]
+```
+
+- f 옵션 : 도커파일을 지정하는 옵션
