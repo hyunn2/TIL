@@ -17,7 +17,9 @@
 
 ## 이미지 특징
 dockerfile, Docker hub로 만듬
+
 dockerfile에 코드와 환경이 포함되어 있음
+
 - 공유가 가능
 - 이미지를 기반으로 다중 컨테이너를 만들 수 있음
 - 읽기 전용이므로 그 자체는 실행되지 않음
@@ -53,6 +55,15 @@ docker cp
 
 <br>
 
+
+detached 모드 vs attached 모드
+
+detached 모드
+
+attached 모드
+
+<br>
+
 -i
 
 표준 입력 활성화
@@ -62,6 +73,12 @@ docker cp
 -t
 
 TTY 모드 사용
+
+<br>
+
+-p [host port:container port]
+
+호스트의 포트와 컨테이너의 포트 연결
 
 <br>
 
@@ -80,6 +97,7 @@ TTY 모드 사용
 --rm
 
 프로세스 종료시 컨테이너 자동 제거
+(docker stop시 컨테이너 제거)
 
 <br>
 
@@ -95,26 +113,71 @@ N개의 쓰기 작업이 수행되면 M초마다 DB의 스냅샷을 저장
 
 <br>
 
+-- 네트워크 관련 --
+
+컨테이너 이름을 도메인, 즉 주소로 사용할 수 있다.
+도커는 컨테이너의 이름을 보고 코드에 플러그인된 컨테이너의 IP주소를 연결한다.
+
+
+<br>
 
 --network
 
-컨테이너에 연결시킬 네트워크 설정
+```
+# p 옵션 안줘도 됨
+docker run -d --name mongodb --network favorite-net mongo
+```
 
+컨테이너에 연결시킬 네트워크 설정
+모든 컨테이너가 서로 통신할 수 있는 네트워크가 생성됨
+
+
+네트워크 생성
+```
+docker network create [이름 설정]
+
+위의 코드에선 favorite-net
+```
+
+기존의 모든 네트워크 검사
+```
+docker network ls
+```
+
+
+-- 로그 확인 --
+```
+docker log [containerID]
+```
+
+
+컨테이너 로그 확인
+```
+docker container logs -t [containerID]
+```
+
+중지된 모든 컨테이너를 제거
+```
+docker container prune
+```
 
 <br>
 
 
 
-
 ### Dockerfile
 
+<br>
+
 이미지 생성
+
 docker build [dockerfile 위치]
 
 컨테이너 실행
+
 docker run -p [애플리케이션에 액세스하려는 로컬 포트]:[내부 도커 컨테이너 노출 포트] [Container ID or Container Names]
 
-p 옵션 : 
+p 옵션 : 컨테이너 포트를 호스트 OS와 매핑시킬수 있는 옵션
 
 ```Dockerfile
 FROM 베이스 이미지
@@ -129,11 +192,18 @@ RUN [실행할 명령어]
 
 EXPOSE [포트 번호]
 # 특정 포트 노출
+# 명시만 하고 컨테이너 실행시 포트를 매핑시켜야함!
 
 CMD [실행할 명령어]
 # 배열로 전달(["poetry", "add", "poetry"])
 # 이미지를 기반으로 컨테이너가 시작될때 실행
 
+```
+
+Dockerfile에 이름을 붙이고 싶을 경우
+```bash
+Dockerfile => name.Dockerfile
+$ docker build -f name.Dockerfile -t [image name] [Dockerfile 위치]
 ```
 
 docker start로 컨테이너 정지 후 다시 실행할 경우
