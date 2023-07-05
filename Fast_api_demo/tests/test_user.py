@@ -2,7 +2,7 @@ from fastapi import status
 
 
 # 회원 가입
-def test_user_create_case(client, user1, pwd1, email1):
+def test_user_create_case(client, user1, pwd1, email1, db, db):
     url = "/api/user/create"
     response = client.post(url,
                            headers={'Content-Type': 'application/json'},
@@ -14,7 +14,7 @@ def test_user_create_case(client, user1, pwd1, email1):
                            })
     assert response.status_code==status.HTTP_204_NO_CONTENT
 
-def test_user_create_case1(client, user1, user2, pwd1, pwd2, email1, email2):
+def test_user_create_case1(client, user1, user2, pwd1, pwd2, email1, email2, db):
     url = "/api/user/create"
 
     response = client.post(url,
@@ -105,7 +105,7 @@ def test_user_create_case1(client, user1, user2, pwd1, pwd2, email1, email2):
     assert response.status_code==status.HTTP_422_UNPROCESSABLE_ENTITY
 
 # 로그인
-def test_login_for_access_token_case(client, user1, user2, pwd1, pwd2, email1):
+def test_login_for_access_token_case(client, user1, user2, pwd1, pwd2, email1, db):
     test_user_create_case(client=client, user1=user1, pwd1=pwd1, email1=email1)
     # 존재하지 않는 아이디
     response = client.post("/api/user/login",
@@ -128,7 +128,7 @@ def test_login_for_access_token_case(client, user1, user2, pwd1, pwd2, email1):
                                })
     
     assert response.status_code==status.HTTP_401_UNAUTHORIZED
-def test_login_for_access_token_case1(client, user1, pwd1, email1):
+def test_login_for_access_token_case1(client, user1, pwd1, email1, db):
     # test_user_create_case(client=client, user1=user1, pwd1=pwd1, email1=email1)
     url = "/api/user/create"
     response = client.post(url,

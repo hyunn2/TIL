@@ -79,8 +79,8 @@
   <!-- 채팅 -->
   <body>
     <div class="container">
-      <h2 class="my-3">Websocket Chat</h2>
-      <h3>Your ID: <span id="ws-id"></span></h3>
+      <h3 class="my-3">Websocket Chat</h3>
+      <h5>Your ID: <span id="ws-id"></span></h5>
       <form action="" onsubmit="sendMessage(event)">
         <div class="input-group mb-3">
           <input type="text" id="messageText" autocomplete="off" placeholder="Message">
