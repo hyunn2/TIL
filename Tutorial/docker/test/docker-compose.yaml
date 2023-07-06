@@ -7,10 +7,6 @@ services:
     command: redis-server --port 6379
     ports:
       - '6379:6379'
-    networks:
-      # - default
-      - same-net
-
 
   backend:
     build:
@@ -18,9 +14,8 @@ services:
       dockerfile: backend.Dockerfile
     ports:
       - '8000:8000'
-    networks:
-      # - default
-      - same-net
+    volumes:
+      - ./backend:/src
     external_links:
       - redis
     depends_on:
@@ -35,19 +30,7 @@ services:
       dockerfile: frontend.Dockerfile
     ports:
       - '5173:5173'
-    networks:
-      # - default
-      - same-net
-    # -it 옵션 추가
     stdin_open: true
     tty: true
     depends_on:
       - backend
-
-  # db:
-
-networks:
-  same-net:
-    driver: bridge
-    # external: true
-    # name: host
