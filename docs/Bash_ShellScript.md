@@ -117,6 +117,11 @@ ex) cat file.txt | grep word
 <br>
 
 **리다이렉션**
+
+```
+command [FD] > filename
+```
+
 종류
 - '<' 파일 읽기
 - '>' 파일 쓰기(overwrite)
