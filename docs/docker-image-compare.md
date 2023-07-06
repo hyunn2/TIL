@@ -47,6 +47,7 @@ image-name:<version>
 ### stretch/buster/jessie
 
 데비안 릴리스의 코드명
+
 버전별 코드 네임이다.
 
 |코드명|버전|
@@ -63,6 +64,7 @@ image-name:<version>
 ### slim
 
 최소한의 패키지만 설치한다.
+
 공간을 최소한으로 하여 최소한의 패키지만 필요할 경우 사용한다.
 
 ```
@@ -81,7 +83,12 @@ slim을 특정 데비안 버전과 결합하게 되면 해당 특정 버전에�
 ### alpine
 
 Alpine Linux 프로젝트를 기반으로 하며, 컨테이너 내부에서 사용하기 위해 구축된 운영체제이다.
-일부 디버깅과 호환성 문제가 있어서 조심해야한다.
+
+크기가 경량화되어 나왔으며 리눅스 커널을 기반으로 했으며 Musl과 BusyBox를 기반에 두었다.
+
+참고로, BusyBox은 엄청 작은 크키의 바이너리 속에 UNIX 유틸리티 기능이 들어있어 임베디드 환경에서 쓰인다.
+
+리눅스 표준인 GNU 도구 대신 BusyBox가 들어있기 때문에 특정 쉘 명령어가 안될 수도 있다.
 
 ```
 image-name:<version>-alpine
@@ -103,7 +110,7 @@ image-name:<version>-windowsservercore
 
 <br>
 
-python3:10을 기준으로 도커 이미지 크기 비교
+python3.10을 기준으로 도커 이미지 크기 비교
 
 ```bash
 base, bookworm(1.01GB) > bullseye(861MB) > buster(831MB) > slim(170MB) > slim-bullseye(119MB) > alpine(55.2MB)
