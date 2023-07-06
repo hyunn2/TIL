@@ -1,0 +1,53 @@
+# 도커 컴포즈파일 사양
+version: '3.8'
+
+services:
+  redis:
+    image: redis
+    command: redis-server --port 6379
+    ports:
+      - '6379:6379'
+    networks:
+      # - default
+      - same-net
+
+
+  backend:
+    build:
+      context: ./
+      dockerfile: backend.Dockerfile
+    ports:
+      - '8000:8000'
+    networks:
+      # - default
+      - same-net
+    external_links:
+      - redis
+    depends_on:
+      - redis
+  
+  frontend:
+    # 빌드
+    build:
+      # 도커파일 위치
+      context: ./
+      # 도커파일 이름
+      dockerfile: frontend.Dockerfile
+    ports:
+      - '5173:5173'
+    networks:
+      # - default
+      - same-net
+    # -it 옵션 추가
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+
+  # db:
+
+networks:
+  same-net:
+    driver: bridge
+    # external: true
+    # name: host
