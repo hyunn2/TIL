@@ -11,7 +11,8 @@ LOGIN_CNT_LIST = 1
 """[유저가 로그인 시도한 횟수 리스트]"""
 
 # 후에 다른 곳에서도 사용한다면 class화하여 import해서 사용을 해야함!
-r = redis.Redis(host="127.0.0.1", port=6379, decode_responses=True)
+# docker compose를 사용하는 경우 host를 변경해줘야함
+r = redis.Redis(host="redis", port=6379, decode_responses=True)
 
 connection = r.ping()
 print("connect : ", connection)
