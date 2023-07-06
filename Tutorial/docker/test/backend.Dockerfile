@@ -1,6 +1,6 @@
 FROM python:3.10
 
-MAINTAINER nahkim "<nahkim@huray.net>"
+LABEL maintainer="<nahkim@huray.net>"
 
 ENV POETRY_VERSION=1.5.1
 

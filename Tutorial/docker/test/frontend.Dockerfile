@@ -1,6 +1,6 @@
 FROM node:20.3.0-alpine
 
-MAINTAINER nahkim <nahkim@huray.net>
+LABEL maintainer="<nahkim@huray.net>"
 
 WORKDIR /app
 
