@@ -1,13 +1,13 @@
-FROM node
+FROM node:20.3.0-alpine
+
+LABEL maintainer="<nahkim@huray.net>"
 
 WORKDIR /app
 
-COPY package.json .
+COPY frontend ./
+
+RUN npm install -g npm@9.7.2
 
 RUN npm install
 
-COPY . .
-
-EXPOSE 5173
-
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev", "--", "--host"]
