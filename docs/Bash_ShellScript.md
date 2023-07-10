@@ -104,6 +104,8 @@ bash built-in 명령어
 
 표준 입력, 출력 및 에러를 연결하기 위해 사용
 
+pipe('|')
+
 ```
 # 기본 형태
 command1 | command2
@@ -118,6 +120,10 @@ ex) cat file.txt | grep word
 
 **리다이렉션**
 
+redirect('>')
+
+
+
 ```
 command [FD] > filename
 ```
@@ -125,7 +131,9 @@ command [FD] > filename
 종류
 - '<' 파일 읽기
 - '>' 파일 쓰기(overwrite)
+    - 만약 존재하는 filename에 리다이렉션할 경우 그 전에 있던 내용은 없어지고 작성한 command 내용이 오버라이딩된다.
 - '>>' 파일 쓰기(insert)
+    - 만약 존재하는 filename에 리다이렉션할 경우 그 전에 있던 작성한 command 내용이 filename에 있는 내용 바로 아래에 작성된다.
 
 <br>
 
