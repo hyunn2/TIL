@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.29.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: frontend
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: frontend
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.29.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/test-default: "true"
+        io.kompose.service: frontend
+    spec:
+      containers:
+        - image: frontend
+          name: frontend
+          ports:
+            - containerPort: 5173
+              hostPort: 5173
+              protocol: TCP
+          resources: {}
+          stdin: true
+          tty: true
+      restartPolicy: Always
+status: {}
