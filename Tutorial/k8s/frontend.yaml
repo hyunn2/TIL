@@ -3,6 +3,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: frontend
+  # annotations:
+  #   metallb.universe.tf/allow-shared-ip: shared
 spec:
   selector:
     app: frontend
@@ -11,7 +13,9 @@ spec:
       port: 5173
       targetPort: 5173
   type: LoadBalancer
-  loadBalancerIP: MINIKUBE_IP
+  # loadBalancerIP: MINIKUBE_IP
+  # externalIPs:
+  # - "MINIKUBE_IP"
 
 ---
 
@@ -21,7 +25,7 @@ kind: Deployment
 metadata:
   name: frontend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: frontend

@@ -12,8 +12,8 @@ sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" ./redis.yaml
 sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" ./backend.yaml
 sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" ./frontend.yaml
 
-minikube addons enable metallb
-kubectl apply -f metallb.yaml
+# minikube addons enable metallb
+# kubectl apply -f metallb.yaml
 
 # 2. docker build
 docker build -f ./redis.Dockerfile -t redis .
