@@ -80,6 +80,11 @@ EX 모드에서 set encoding=utf-8 입력
   - 파일 시스템
   - 압축
 
+
+|시스템 관리|사용자 관리|파일 시스템|압축|
+|---|---|---|---|
+|crontab <br> exec <br> free <br> htop <br> jobs <br> journalctl <br> kill <br> logrotate <br> man <br> nohup <br> ntp <br> openssl <br> pgrep <br> ps <br> sar <br> sudo(su) <br> systemctl <br> top <br> ulimit <br> uname <br> wait <br> watch <br> which <br> yes|groupadd <br> useradd|cd <br> cp <br> df <br> du <br> find <br> ln <br> ls <br> lsof <br> mkdir <br> mkfs <br> mv <br> read <br> rm|gzip <br> gunzip <br> zcat <br> tar <br> zip <br> unzip|
+
 <br>
 
 - 처리 명령어
@@ -90,10 +95,14 @@ EX 모드에서 set encoding=utf-8 입력
   - 형식 파일
   - 기타
 
+|문자열 처리|날짜|파일|네트워크|형식 파일|기타|
+|---|---|---|---|---|---|
+|awk <br> cat <br> cut <br> diff <br> echo <br> grep <br> sed <br> sort <br> tr|date|file <br> head <br> less <br> more <br> split <br> tail <br> xxd|curl <br> ifconfig <br> ip <br> lynx <br> netstat <br> nslookup <br> scp <br> sftp <br> ssh <br> ssh-copy-id <br> ssh-keygen <br> tcpdump <br> telnet <br> wget|jq <br> xmlint|shift|
+
+
 <br>
 
-# 쉘 스크립트
-bash built-in 명령어
+## bash built-in 명령어
 
 - 파이프, 리다이렉션
 - env, set, export
@@ -101,6 +110,8 @@ bash built-in 명령어
 <br>
 
 **파이프**
+
+연산제어자
 
 표준 입력, 출력 및 에러를 연결하기 위해 사용
 
@@ -141,8 +152,18 @@ command [FD] > filename
 <br>
 표준 에러를 표준 출력으로 리다이렉션 (파일 디스크립터 번호를 통해)
 
+|기본|FD|
+|---|---|
+|표준 입력|0|
+|표준 출력|1|
+|표준 에러|2|
+
+사용 방법
+
 - /dev/null
 <br>
 표준 출력을 버리기 위한 용도로 사용하는 디스크립터
 
+ex) docker build [] > /dev/null 2>&1
 
+리눅스의 dev 폴더는 디바이스 파일들이 있다.
